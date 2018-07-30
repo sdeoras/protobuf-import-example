@@ -10,6 +10,20 @@ syntax = "proto3";
 // -I references two include paths: ${GOPATH}/src and .
 // import filepath is searched relative to include paths.
 
+/*
+Managing errors:
+
+Imported proto file may have other dependencies, all of which need to be available during build.
+For instance a missing dependency may cause following error:
+
+k8s.io/apiextensions-apiserver/pkg/apis/apiextensions/v1beta1/generated.proto: File not found.
+k8s.io/api/core/v1/generated.proto: Import "k8s.io/apiextensions-apiserver/pkg/apis/apiextensions/v1beta1/generated.proto" was not found or had errors.
+k8sMesg.proto: Import "k8s.io/api/core/v1/generated.proto" was not found or had errors.
+k8sMesg.proto:18:5: "k8s.io.api.core.v1.Pod" is not defined.
+
+which is fixed by making sure ${GOPATH}/src/k8s.io/apiextensions-apiserver folder is present
+*/
+
 package mesg;
 
 import "k8s.io/api/core/v1/generated.proto";
