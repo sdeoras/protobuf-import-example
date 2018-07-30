@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+// following proto-def makes use of a message defined elsewhere.
+// in particular, it uses k8s podspec defined in a file referenced by import statement.
+// build this file as follows:
+/*
+    mkdir -p mesg
+    protoc -I=${GOPATH}/src -I=. --go_out=mesg k8sMesg.proto
+*/
+// -I references two include paths: ${GOPATH}/src and .
+// import filepath is searched relative to include paths.
+
+package mesg;
+
+import "k8s.io/api/core/v1/generated.proto";
+
+message Data {
+    k8s.io.api.core.v1.Pod Pod = 1;
+}
